@@ -49,8 +49,8 @@ node tools/serve.mjs
 
 Open <http://localhost:8412>. (`index.html` won't load directly — it fetches JSON over HTTP.)
 
-**Data** — original compilation, not transcribed from any source. See [docs/DATA-PROVENANCE.md](docs/DATA-PROVENANCE.md).
+**Data:** original compilation, not transcribed from any source. See [docs/DATA-PROVENANCE.md](docs/DATA-PROVENANCE.md).
 
-**Contributing** — [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md). A blend is one JSON object; the validator checks it adds up.
+**Contributing** [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md). A blend is one JSON object; the validator checks it adds up.
 
 </details>
