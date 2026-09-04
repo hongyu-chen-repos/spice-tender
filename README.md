@@ -7,6 +7,20 @@ Cook from the spices you already own.
 This application operates entirely on your device with no server, no account, no build steps, and no dependencies. It works offline and installs directly to your mobile home screen. The local database includes 91 spices, 50 blends, and 64 dishes.
 
 
+## 📲 Install on your phone
+
+Open this address in your phone's browser:
+
+**https://hongyu-chen-repos.github.io/spice-tender/**
+
+Then add it to your home screen so it opens like an app:
+
+- **iPhone (Safari)** — tap the Share icon → **Add to Home Screen** → **Add**
+- **Android (Chrome)** — tap the **⋮** menu → **Install app** (or **Add to Home Screen**)
+
+Once added, open it from the home screen icon, not the browser. It works offline after the first load.
+
+
 ## 📱 Screens
 
 
