@@ -26,40 +26,6 @@ node tools/serve.mjs
 
 Open <http://localhost:8412>. (Opening `index.html` directly will not work — it loads JSON over HTTP.)
 
-## 🧪 Test
-
-```bash
-node --test tools/test.mjs && node tools/validate.mjs && node tools/voice.mjs
-```
-
-## 📦 Deploy
-
-```bash
-gh repo create spice-tender --public --source=. --push
-```
-
-Then enable **Settings → Pages** on the repository — branch `main`, root. Nothing to build.
-
-## Structure
-
-```
-data/            spices.json (91) · blends.json (50) · dishes.json (64)
-src/engine/      units · scale · heat · plan · substitute · pairing · pantry · shopping · compose
-src/app.js       interface
-src/ui/i18n.js   English + Chinese strings
-tools/           validate.mjs · test.mjs · voice.mjs · make-icons.mjs
-docs/            provenance · schema · contributing · state · design decisions
-```
-
-Engine has no DOM dependency:
-
-```js
-import { createBench, scaleBlend, makePlan } from './src/engine/index.js';
-
-const bench = createBench({ spices, blends, dishes });
-const scaled = scaleBlend(bench.blendById['garam-masala'], 40);
-makePlan(scaled, bench.byId).steps.forEach(s => console.log(s.text));
-```
 
 ## Data
 
