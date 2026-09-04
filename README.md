@@ -2,7 +2,7 @@
 
 Cook from the spices you already own.
 
-Spice Tender is a free, local application that helps you build, scale, and cook with 91 dry spices, 50 blends, and over 64 dishes.
+Spice Tender is a free, local application that helps you build, scale, and cook with 91 dry spices and 50 blends across over 64 dishes.
 
 
 
@@ -19,12 +19,12 @@ From then on, open it from the home screen icon, not the browser.
 
 ## 📱 How to use it
 
-- **Cook** — pick a dish, set how many people you're feeding, and the recipe scales to that
-- **Pantry** — tick or search which spices you own; see what you can cook right now, and what's worth buying next
-- **Blends** — browse all 50 blends, or tap **Build** to make your own starting from one lead spice, then fine-tune it gram by gram
-- **A blend page** — exact amounts in grams (spoon measures shown too), when to toast, how fine to grind, what to substitute if you're missing something, how hot it is, how long it keeps, and a card you can print
-- **Lists** — save blends under names you choose; each list totals its own shopping list
-- **Settings** — language, default number of servings, clear or reset your data
+- **Cook**: pick a dish, set how many people you're feeding, and the recipe scales to that
+- **Pantry**: tick or search which spices you own; see what you can cook right now, and what's worth buying next
+- **Blends**: browse all 50 blends, or tap **Build** to make your own starting from one lead spice, then fine-tune it gram by gram
+- **A blend page**: exact amounts in grams (spoon measures shown too), when to toast, how fine to grind, what to substitute if you're missing something, how hot it is, how long it keeps, and a card you can print
+- **Lists**: save blends under names you choose; each list totals its own shopping list
+- **Settings**: language, default number of servings, clear or reset your data
 
 ## ⚠️ Good to know
 
