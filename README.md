@@ -2,9 +2,9 @@
 
 Cook from the spices you already own.
 
-FSpice Tender is a free, local application that helps you build, scale, and cook with 91 dry spices, 50 blends, and over 64 dishes.
+Spice Tender is a free, local application that helps you build, scale, and cook with 91 dry spices, 50 blends, and over 64 dishes.
 
----
+
 
 ## 📲 Install on your phone
 
