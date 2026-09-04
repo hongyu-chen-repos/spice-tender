@@ -1,0 +1,17 @@
+{
+  "name": "Spice Tender",
+  "short_name": "Spice Tender",
+  "description": "Work out what to cook from the spices you already own. Blends weighed in grams, with toasting order, grind, substitutions and a printable card.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFF6EC",
+  "theme_color": "#D62E00",
+  "categories": ["food", "lifestyle", "utilities"],
+  "icons": [
+    { "src": "./assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
