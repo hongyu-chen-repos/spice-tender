@@ -2,15 +2,13 @@
 
 Cook from the spices you already own.
 
-Free. No account, no ads, nothing leaves your phone. Works offline once loaded.
-
-**https://hongyu-chen-repos.github.io/Spice-Tender/**
-
-91 spices · 50 blends · 64 dishes
+FSpice Tender is a free, local application that helps you build, scale, and cook with 91 dry spices, 50 blends, and over 64 dishes.
 
 ---
 
 ## 📲 Install on your phone
+
+**https://hongyu-chen-repos.github.io/Spice-Tender/**
 
 Open the link above in your phone's browser. Then add it to your home screen so it opens full-screen like an app:
 
