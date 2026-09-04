@@ -11,7 +11,7 @@ This application operates entirely on your device with no server, no account, no
 
 Open this address in your phone's browser:
 
-**https://hongyu-chen-repos.github.io/spice-tender/**
+**https://hongyu-chen-repos.github.io/Spice-Tender/**
 
 Then add it to your home screen so it opens like an app:
 
