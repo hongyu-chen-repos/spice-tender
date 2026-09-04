@@ -1,71 +1,59 @@
 # 🧂 Spice Tender
 
-
 Cook from the spices you already own.
 
-
-This application operates entirely on your device with no server, no account, no build steps, and no dependencies. It works offline and installs directly to your mobile home screen. The local database includes 91 spices, 50 blends, and 64 dishes.
-
-
-## 📲 Install on your phone
-
-Open this address in your phone's browser:
+Free. No account, no ads, nothing leaves your phone. Works offline once loaded.
 
 **https://hongyu-chen-repos.github.io/Spice-Tender/**
 
-Then add it to your home screen so it opens like an app:
+91 spices · 50 blends · 64 dishes
+
+---
+
+## 📲 Install on your phone
+
+Open the link above in your phone's browser. Then add it to your home screen so it opens full-screen like an app:
 
 - **iPhone (Safari)** — tap the Share icon → **Add to Home Screen** → **Add**
 - **Android (Chrome)** — tap the **⋮** menu → **Install app** (or **Add to Home Screen**)
 
-Once added, open it from the home screen icon, not the browser. It works offline after the first load.
+From then on, open it from the home screen icon, not the browser.
 
+## 📱 How to use it
 
-## 📱 Screens
+- **Cook** — pick a dish, set how many people you're feeding, and the recipe scales to that
+- **Pantry** — tick or search which spices you own; see what you can cook right now, and what's worth buying next
+- **Blends** — browse all 50 blends, or tap **Build** to make your own starting from one lead spice, then fine-tune it gram by gram
+- **A blend page** — exact amounts in grams (spoon measures shown too), when to toast, how fine to grind, what to substitute if you're missing something, how hot it is, how long it keeps, and a card you can print
+- **Lists** — save blends under names you choose; each list totals its own shopping list
+- **Settings** — language, default number of servings, clear or reset your data
 
+## ⚠️ Good to know
 
-- **Cook:** Select a dish and set the desired number of servings. 
-- **Pantry:** Track the spices you currently own via search or tick marks. The app indicates which blends are ready to cook and which ingredients you need to buy next.
-- **Blends:** Browse all 50 pre-defined blends. Alternatively, use **Build** to create a custom blend starting from a lead spice, then adjust the quantities gram by gram.
-- **Blend Page:** View ingredient amounts in both grams and spoon measurements. Details include toasting order, grind size, ranked substitutes, Scoville heat units, shelf life, and a printable recipe card.
-- **Lists:** Save and organize blends under custom names. Each list automatically calculates its own shopping list.
-- **Settings:** Configure the application language, set a default number of servings, and clear or reset your local data.
+- Grams are exact. Spoon and piece amounts are estimates.
+- Substitute suggestions are a starting point — taste as you go.
+- Southeast Asian dishes are thin, since that cuisine leans on wet pastes rather than dry spice blends.
+- The interface and all names are English + Chinese. Cooking notes are English only.
 
+## 📄 License
 
-## 🚀 Run locally
+[MIT](LICENSE)
+
+---
+
+<details>
+<summary><strong>For developers</strong></summary>
+
+Static site. Zero dependencies, zero build step.
 
 ```bash
 node tools/serve.mjs
 ```
 
-Open <http://localhost:8412>. (Opening `index.html` directly will not work — it loads JSON over HTTP.)
+Open <http://localhost:8412>. (`index.html` won't load directly — it fetches JSON over HTTP.)
 
+**Data** — original compilation, not transcribed from any source. See [docs/DATA-PROVENANCE.md](docs/DATA-PROVENANCE.md).
 
-## Data
+**Contributing** — [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md). A blend is one JSON object; the validator checks it adds up.
 
-Original compilation. 
-
-For gram ratios, notes and pairings are this project's own, see [docs/DATA-PROVENANCE.md](docs/DATA-PROVENANCE.md).
-
-## Known limits
-
-
-- Grams serve as the official unit of record, while spoon and piece equivalents are nominal measurements.
-
-- Substitution ranking is based on a heuristic model evaluating flavor family, Scoville heat, botanical kinship, and functional role, serving primarily as a starting point.
-
-- Southeast Asian coverage is limited because that cuisine primarily relies on wet pastes, whereas this tool is exclusively built around dry blends.
-
-- Cooking instruction is available in English only, although names and interface chrome are fully bilingual.
-
-- Ceylon cinnamon, wasabi, and dried cilantro are not included in any blend, resulting in no pairing-graph edges for these entries.
-
-## 🤝 Contributing
-
-[docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)
-
-Each blend is structured as a single JSON object and automatically validated. 
-
-## 📄 License
-
-[MIT](LICENSE)
+</details>
