@@ -1,0 +1,492 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Spice Tender — complete UI/UX specification for review
+#
+# HOW TO REVIEW THIS FILE
+#   You are reviewing a shipped app's design. Everything it does is below; you do
+#   not need to see it running.
+#   1. Read `product` first. Judge every decision against those users and
+#      constraints, not against general best practice.
+#   2. Each item in `decisions` has an `id`. Reference ids in your critique.
+#   3. `confidence: low` marks where the author already doubts himself. Do not
+#      only pile onto those — the high-confidence ones may be the real mistakes.
+#   4. Prioritise: which three changes would most improve clarity and usefulness
+#      for someone cooking, hands dirty, phone on the counter?
+#   5. Say what you would do instead, concretely. "Add a search box" not
+#      "improve findability".
+#   6. Flag anything you think is wrong that is NOT listed in `known_gaps`.
+#
+# WHAT NOT TO SUGGEST
+#   - Frameworks, dependencies, or a build step. Constraint C1 is absolute.
+#   - Accounts, sync, social, sharing, AI features, gamification.
+#   - Anything requiring a backend.
+# ─────────────────────────────────────────────────────────────────────────────
+
+meta:
+  title: Spice Tender design decisions
+  status: active
+  created: "2026-09-03"
+  updated: "2026-09-04"
+  purpose: >
+    A numbered, machine-readable record of every UI/UX decision, built for an
+    external review and kept afterward as the project's architecture decision
+    record. Reference an id (e.g. NAV-3) rather than describing a screen area.
+  file: design-spec
+  version: "2026-09-03"
+  review_status: mostly-resolved
+  status_note: >
+    Seven decisions (FOUND-3, NAV-2, NAV-3, COOK-3, PAN-2, BUILD-4, YOU-1) were
+    acted on and carry a `resolution` field. The rest of the document is still
+    an accurate record of the decisions as reviewed, and known_gaps is untouched.
+
+product:
+  name: Spice Tender
+  one_line: Cook from the spices you already own.
+  what_it_does: >
+    Holds 91 spices, 50 spice-blend recipes weighed in grams, and 64 dishes.
+    The user ticks which spices they own. The app then ranks dishes and blends by
+    how much of each they can actually make, scales any blend to a number of
+    servings, gives the order things go in the pan, and suggests a substitute for
+    anything missing.
+  platform: Static web page, installable to a phone home screen, works offline.
+  primary_context: Standing in a kitchen, phone on the counter, hands dirty, mid-cook.
+  secondary_context: Sitting down, planning what to buy.
+  users: Home cooks who own a scale and want to make their own blends. Not professionals.
+  languages: [en, zh]
+  scale: 91 spices · 50 blends · 64 dishes · 545 lines of prose
+
+constraints:
+  C1: Zero dependencies, no build step, no backend. Non-negotiable.
+  C2: Grams are the unit of record. Spoons are shown but labelled approximate.
+  C3: All data is original; no copyrighted text or tables. Nothing may be added that changes this.
+  C4: Scope is closed. New capability needs a reason from real use, not from a feature list.
+  C5: Light theme only, from a supplied design reference.
+
+non_goals:
+  - Teaching cooking technique beyond what a blend needs.
+  - Recipe management for full dishes. It handles the spice part only.
+  - Any social, sharing, or account feature.
+
+# ── the visual system ────────────────────────────────────────────────────────
+tokens:
+  colour:
+    ground: "#FFF6EC"        # cream page
+    surface: "#FFFFFF"       # cards
+    ink: "#111111"
+    ink_muted: "#6B6B6B"     # the only muted grey; clears 4.5:1 on both grounds
+    accent: "#D62E00"        # one red, used sparingly
+    ok: "#00A86B"
+    warn: "#FFB300"
+    missing: "#FF4D00"
+  shape: Every corner square. Only the settings toggle is round.
+  type_family: "Helvetica Neue, Helvetica, Arial, Noto Sans SC, PingFang SC"
+  type_sizes_px: [9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 17, 20, 22, 26, 34, 40, 46]
+  section_heading: 10.5px uppercase, letter-spacing .14em, muted. Never large.
+  page_title: 34px bold, tight negative tracking. One per screen.
+  spacing_unit: 24px page padding
+  spice_colour_system: >
+    Each of 13 flavour families has a colour. A spice's swatch comes from its lead
+    family, so all 91 have one and any new spice inherits one. Used as a 9px square
+    beside every spice name, and as a stacked band showing a blend's weight split.
+
+# ── what exists ──────────────────────────────────────────────────────────────
+screens:
+  - id: start
+    route: "#/start"
+    shown: First run only, then dismissed permanently
+    purpose: Say what this is, then get the pantry filled
+    contains: [eyebrow, two-tone headline, 2-line intro, 24 common spices as chips, save button, skip link]
+    tab_bar: hidden
+
+  - id: cook
+    route: "#/cook"
+    purpose: Pick tonight's dish
+    contains: [servings stepper, search, 8 kind filters, 64 dish cards sorted by coverage]
+    card: [coverage strip on top edge, dish name, best blend + count of others, when to add it, coverage tag]
+
+  - id: pantry
+    route: "#/pantry"
+    purpose: Say what you own
+    contains:
+      - spice count
+      - add-the-basics button
+      - clear button
+      - 91 chips in 9 groups
+      - what you can make now
+      - best next purchase
+
+  - id: blends
+    route: "#/blends"
+    purpose: Browse the 50 formulas
+    contains: [search, 23 cuisine filters, 50 blend cards sorted by coverage]
+
+  - id: blend
+    route: "#/blend/:id"
+    purpose: Make one blend
+    contains:
+      - batch mode toggle (by servings / by weight)
+      - batch total at 46px
+      - amounts table (swatch, name, form, share | grams, spoons | info button)
+      - alternatives behind one button
+      - method steps on a full-bleed dark panel
+      - facts table (when to add, per serving, heat, keeps, region, good on)
+      - print a card / save to a list
+
+  - id: build
+    route: "#/build"
+    reached_from: blends
+    purpose: Compose a new blend
+    contains: [lead spice select, cuisine select, when-to-add select, heat slider, stacked colour band, gram-level +/- per component, one reason per component, tuning note, reset]
+    note: No longer a tab. Entered from a full-width action at the top of Blends.
+
+  - id: list
+    route: "#/list"
+    purpose: Saved blends and their shopping
+    contains: [named list tabs, rename, delete, saved blend cards, to buy, already have]
+    note: Returned to the tab bar; no longer reached through Settings.
+
+  - id: settings
+    route: "#/settings"
+    purpose: Settings only
+    contains: [language, servings, clear spices, reset everything]
+    note: >
+      Replaces the `you` screen. Its three stat tiles moved to Pantry, where they
+      describe the list directly underneath them instead of a screen away.
+
+navigation:
+  pattern: Five fixed tabs along the bottom. No header anywhere.
+  tabs: [cook, pantry, blends, list, settings]
+  not_a_tab: [build, start, blend]
+  icons: Five hand-drawn inline SVGs — pan, jar, layers, bookmark, sliders — stroke-based, no fill, 21px.
+  back_buttons: Only on the blend page.
+
+# ── every decision, with an id ───────────────────────────────────────────────
+decisions:
+
+  - id: FOUND-1
+    area: foundations
+    decision: Cream ground, white cards, one red accent.
+    why: From the supplied design reference. Red is used for one thing at a time.
+    confidence: high
+
+  - id: FOUND-2
+    area: foundations
+    decision: Nothing is rounded except the settings toggle.
+    why: The strongest signal in the reference. It is what stops this reading as a default web app.
+    confidence: high
+
+  - id: FOUND-3
+    area: foundations
+    decision: Eighteen distinct font sizes.
+    why: Each was picked for one place.
+    confidence: low
+    self_criticism: Too many for a scale this small. Six or seven would hold the same hierarchy and be easier to keep consistent.
+    resolution: >
+      Done. Seven tokens (--t1..--t7, 10-46px) replace all eighteen sizes. Commit 5bdc188.
+
+  - id: FOUND-4
+    area: foundations
+    decision: Light theme only. No dark palette exists.
+    why: The reference is light; a dark palette was not in the brief.
+    confidence: low
+    self_criticism: A cooking app gets used at night.
+
+  - id: FOUND-5
+    area: foundations
+    decision: Section headings are 10.5px uppercase labels, never large type.
+    why: Keeps the page title as the only focal point.
+    confidence: high
+
+  - id: FOUND-6
+    area: foundations
+    decision: Every spice carries a colour derived from its lead flavour family.
+    why: Derived not assigned, so coverage is automatic. A blend reads as weights and colours at once.
+    confidence: high
+
+  - id: NAV-1
+    area: navigation
+    decision: Five bottom tabs, no header at all.
+    why: Thumb reach. Every screen already had its own title.
+    confidence: high
+
+  - id: NAV-2
+    area: navigation
+    decision: Tab icons are abstract shapes made from border-radius.
+    why: From the reference. No icon set to maintain.
+    confidence: low
+    self_criticism: Nobody can guess which shape means Blends without reading the label.
+    resolution: >
+      Done. Five hand-drawn inline SVGs (pan, jar, layers, bookmark, sliders) replace the border-radius shapes. Commit ac41844.
+
+  - id: NAV-3
+    area: navigation
+    decision: Lists is not a tab; it lives inside You. Build gets the fifth tab.
+    why: Six tabs do not fit; Build is the more distinctive feature.
+    confidence: low
+    self_criticism: Saved blends and shopping are probably used more often than Build.
+    resolution: >
+      Reversed. Build left the tab bar for a full-width entry at the top of Blends; Lists returned to the bar. Commit ac41844.
+
+  - id: NAV-4
+    area: navigation
+    decision: No back buttons except on blend and list pages.
+    why: Flat structure; tabs are the way back.
+    confidence: medium
+
+  - id: START-1
+    area: onboarding
+    decision: Two lines of intro, then the spice picker immediately on the same screen.
+    why: The first action is also the action that makes everything else work. No carousel.
+    confidence: high
+
+  - id: START-2
+    area: onboarding
+    decision: Only 24 common spices on the first screen, not all 91.
+    why: 91 chips is a wall.
+    confidence: high
+
+  - id: START-3
+    area: onboarding
+    decision: Save and Skip both dismiss it permanently. Reachable afterwards only by URL.
+    why: Nobody wants an intro twice.
+    confidence: medium
+    self_criticism: No link back to it from anywhere in the app.
+
+  - id: COOK-1
+    area: cook
+    decision: Dishes sorted by how much of the blend the user can already make.
+    why: The whole premise is cooking from what you have.
+    confidence: high
+
+  - id: COOK-2
+    area: cook
+    decision: Coverage is a coloured strip along the top edge of the card, green/amber/orange.
+    why: Reads at a glance down a scrolling list without adding a text row.
+    confidence: high
+
+  - id: COOK-3
+    area: cook
+    decision: Coverage is measured by weight of the blend, not by count of missing spices.
+    why: Missing 1g of clove is not the same as missing 12g of ancho.
+    confidence: low
+    self_criticism: >
+      A figure like 93% covered is accurate, but telling a cook they are missing
+      two things may be more useful.
+    resolution: >
+      Done. Cards now read "93% covered · 2 missing" and, at three or fewer, name them: "Missing paprika and cumin". Commit ac41844.
+
+  - id: COOK-4
+    area: cook
+    decision: Each dish shows only its best-matching blend, with "+3" for the rest.
+    why: Four blend options per dish would be four rows.
+    confidence: medium
+
+  - id: COOK-5
+    area: cook
+    decision: The servings stepper sits at the top of Cook.
+    why: It is the number most often changed.
+    confidence: low
+    self_criticism: It is a global value but looks screen-local. It also appears in You, which may read as two controls.
+
+  - id: PAN-1
+    area: pantry
+    decision: 91 spices as chips grouped by plant part (seed, bark, root, flower, pepper, chilli, herb, allium, other).
+    why: Botanical grouping matches how a spice rack is organised and how substitution works.
+    confidence: medium
+    alternative_rejected: Alphabetical, which would scatter related spices.
+
+  - id: PAN-2
+    area: pantry
+    decision: No search box in Pantry.
+    why: Not a decision so much as an omission.
+    confidence: low
+    self_criticism: It is the longest list in the app and the only one without search.
+    resolution: >
+      Done. Search added, matches either language. Commit e05a9a2.
+
+  - id: PAN-3
+    area: pantry
+    decision: The add-the-basics button ticks 24 common spices at once.
+    why: Ticking two dozen chips by hand is a bad first experience.
+    confidence: high
+
+  - id: PAN-4
+    area: pantry
+    decision: Below the picker, show what you can make now and the one spice worth buying next.
+    why: Turns an inventory screen into a decision screen. Ranked by blends unlocked.
+    confidence: high
+
+  - id: BLEND-1
+    area: blend
+    decision: The batch total is the largest type in the app at 46px.
+    why: It is the number the user acts on.
+    confidence: high
+
+  - id: BLEND-2
+    area: blend
+    decision: Name and share on the left, grams bold on the right, spoons small and grey beneath.
+    why: Grams are exact, spoons are an estimate, and the hierarchy says so.
+    confidence: high
+
+  - id: BLEND-3
+    area: blend
+    decision: Missing spices are only dimmed in the table. Substitutions live behind one "Alternatives" button.
+    why: A blend you are short on should read as a recipe, not a list of problems.
+    confidence: high
+    note: This was changed at the owner's request; the substitutions used to be inline.
+
+  - id: BLEND-4
+    area: blend
+    decision: The method steps sit on a full-bleed dark panel with amber step numbers.
+    why: Separates "what goes in" from "what you do" without needing a heading.
+    confidence: high
+
+  - id: BLEND-5
+    area: blend
+    decision: A poor substitute says so in plain words and names what to buy instead.
+    why: Presenting a rough match like a good one is worse than offering nothing.
+    confidence: high
+
+  - id: BLEND-6
+    area: blend
+    decision: Two batch modes, by servings or by weight. The weight resets per blend.
+    why: A weight set on one blend should not follow you to another.
+    confidence: high
+
+  - id: BUILD-1
+    area: build
+    decision: Four inputs (lead spice, cuisine, when to add, heat) and the blend regenerates live.
+    why: >
+      Four is the smallest set that changes the output meaningfully. Regenerating
+      live rather than behind a button means the user can feel what each control does.
+    confidence: medium
+
+  - id: BUILD-2
+    area: build
+    decision: The weight split is shown as a stacked band of spice colours.
+    why: Proportion is the thing being designed.
+    confidence: high
+
+  - id: BUILD-3
+    area: build
+    decision: Every component carries one sentence saying why it is there.
+    why: The reasoning is the feature; the pairings come from a graph computed from the 50 blends.
+    confidence: low
+    self_criticism: This is the most text-heavy part of the app.
+
+  - id: BUILD-4
+    area: build
+    decision: The generated blend cannot be edited. You change the inputs and it recomposes.
+    why: Not built.
+    confidence: low
+    self_criticism: The design reference had per-gram plus/minus controls. This is the difference between generating and designing.
+    resolution: >
+      Done. Every component has gram-level +/- controls; the colour band redraws live; changing an input discards the tuning. Commit 8ebd5ee.
+
+  - id: LIST-1
+    area: lists
+    decision: Named lists that hold blends first and cost out shopping second.
+    why: A collection you return to, not a one-shot shopping list.
+    confidence: high
+
+  - id: YOU-1
+    area: you
+    decision: Three stat tiles — spices owned, dishes ready, blends ready.
+    why: >
+      All three are computed from the pantry, so they move when the user ticks
+      something. They answer "is this worth filling in" without a tutorial.
+    confidence: medium
+    self_criticism: Counts are not actions. This screen may not earn a tab on their strength alone.
+    resolution: >
+      Reversed, on its own self-criticism. The tiles moved to Pantry, where they describe the list directly underneath. The `you` screen is now `settings` and holds only settings. Commit ac41844 / e05a9a2.
+
+  - id: YOU-2
+    area: settings
+    decision: Settings contain only things that exist — language, servings, two clear actions.
+    why: The reference had three toggles for features this app does not have. Fake switches were not built.
+    confidence: high
+
+  - id: YOU-3
+    area: settings
+    decision: Destructive actions confirm in place and ignore a second tap within 600ms.
+    why: Without the delay an impatient double tap wiped the pantry.
+    confidence: high
+
+  - id: COPY-1
+    area: writing
+    decision: State the action. Explain only where a cook would otherwise get it wrong.
+    why: Owner's rule. Enforced by tools/voice.mjs in CI.
+    confidence: high
+    example_before: "Celery seed leads, which is unusual and is exactly what makes it taste like a crab boil rather than a rub."
+    example_after: "Celery seed should come through first. That's what gives it the crab-boil flavour."
+
+  - id: COPY-2
+    area: writing
+    decision: Note length varies deliberately — 24% one sentence, 68% two, 8% three.
+    why: 81 of 91 notes used to be exactly two sentences. The symmetry was the tell.
+    confidence: high
+
+  - id: COPY-3
+    area: writing
+    decision: Cook, Blends and You have no description under the title at all.
+    why: The old ones only described the screen the reader was already looking at.
+    confidence: high
+
+  - id: COPY-4
+    area: writing
+    decision: In English no Chinese name appears. In Chinese the English name stays.
+    why: The jar in the shop says the English name.
+    confidence: high
+
+  - id: STATE-1
+    area: behaviour
+    decision: Only pantry, lists, language, servings and the seen-intro flag persist.
+    why: Searches and filters belong to the visit you typed them in.
+    confidence: high
+
+  - id: STATE-2
+    area: behaviour
+    decision: Stored data is coerced to the expected shape on load, and the error screen offers a reset.
+    why: A malformed pantry used to throw on every screen including the one with the reset button.
+    confidence: high
+
+  - id: A11Y-1
+    area: accessibility
+    decision: Text contrast clears WCAG AA on every screen; the spice sheet is a real modal that traps focus and returns it.
+    why: >
+      Audited, not assumed. One grey token failed at 4.25:1 against the cream and
+      was removed. The sheet claimed aria-modal while letting focus tab out behind it.
+    confidence: high
+
+# ── what is already known to be wrong or missing ─────────────────────────────
+known_gaps:
+  - id: GAP-1
+    what: The 50 per-serving doses are estimates. Never verified by cooking.
+    severity: high
+    note: Not a design choice. The only open item code cannot close.
+  - id: GAP-2
+    what: Southeast Asia is thin. Its seasoning is mostly wet paste and this tool is about dry blends.
+    severity: medium
+  - id: GAP-3
+    what: Generated method steps and the 205 data notes exist in English only. Names, chrome, filters, regions and substitution notes are bilingual.
+    severity: medium
+  - id: GAP-4
+    what: Three spices appear in no blend and so have no edges in the pairing graph.
+    severity: low
+  - id: GAP-5
+    what: No search in Pantry. See PAN-2.
+    severity: medium
+  - id: GAP-6
+    what: A built blend cannot be adjusted by hand. See BUILD-4.
+    severity: medium
+
+# ── the author's own shortlist, for comparison with yours ────────────────────
+# All five items on the original shortlist are done, along with two more a
+# design review raised independently (NAV-2, YOU-1). See each id's `resolution`
+# field above. Nothing is queued next; the open work is the unverified doses in
+# known_gaps, which no design change touches.
+author_would_change_first_DONE:
+  - PAN-2   # search added
+  - FOUND-3 # seven-size type scale
+  - BUILD-4 # gram-level tuning
+  - NAV-3   # Build off the bar, Lists back on it
+  - COOK-3  # coverage names what is missing
