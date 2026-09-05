@@ -8,7 +8,7 @@ Spice Tender is a free, local application that helps you build, scale, and cook 
 
 ## 📲 Install on your phone
 
-**https://hongyu-chen-repos.github.io/Spice-Tender/**
+**https://hongyu-chen-repos.github.io/spice-tender/**
 
 Open the link above in your phone's browser. Then add it to your home screen so it opens full-screen like an app:
 
