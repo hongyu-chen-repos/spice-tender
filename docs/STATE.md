@@ -2,7 +2,7 @@
 title: State — you are here
 status: active
 created: 2026-09-02
-updated: 2026-09-02
+updated: 2026-09-05
 purpose: The evergreen cursor for this project. Read first, update last.
 ---
 
@@ -26,6 +26,12 @@ running.
   Settings — bilingual chrome, named saved lists, offline via service worker,
   printable card. Restyled and verified in a browser at mobile and desktop
   width, with no horizontal overflow at 375px on any view.
+- Generated method steps ("in the pan") are translated. The engine returns
+  structured step data; `planStepText()` in `src/ui/i18n.js` assembles the
+  sentence per language, the same pattern already used for substitution notes.
+  The short flavour note on each spice, blend and dish is still English only —
+  that is free-text data, not a generated sentence, and is a separate, much
+  larger translation job.
 - Provenance: clean. Nothing distributable came from a copyrighted source. See
   [DATA-PROVENANCE.md](DATA-PROVENANCE.md).
 - Accessibility: text contrast clears WCAG AA on all eight views (including
@@ -40,26 +46,20 @@ running.
 
 ## Not done
 
-- **Not pushed to GitHub.** The repository is committed locally and ready; the
-  README's Pages link already points at the real
-  `hongyu-chen-repos.github.io/spice-tender/` URL, waiting for the push and the
-  Pages toggle to make it real. Pushing is a deliberate, human decision — the
-  exact command is in `README.md`'s Running section.
-  **Delete this bullet the moment that push happens** — a repo that says "not
-  pushed to GitHub" from inside GitHub reads as broken, not as honest.
+- **The 205 flavour notes are English only.** Each spice, blend and dish carries
+  one hand-written descriptive sentence (data, not generated prose); translating
+  those is a real editorial project, not a formatting change, and is not
+  scheduled.
 
 ## Next, in order of value
 
-1. Push, enable Pages, fix the README link.
-2. Cook from it for a week and correct the doses that are wrong. Every
+1. Cook from it for a week and correct the doses that are wrong. Every
    `g_per_serving` is a considered estimate, and estimates are what real use
    corrects. This is the only open item that code cannot close.
-3. Southeast Asia is thin because its seasoning is mostly wet paste. Either add a
+2. Southeast Asia is thin because its seasoning is mostly wet paste. Either add a
    paste model with a liquid component, or say plainly that the tool is about dry
    blends.
-4. Translate the generated prose. The engine already returns structured steps, so
-   this is a formatting layer, not a rewrite.
-5. Decide on dark mode (`FOUND-4` in the design spec) — flagged low-confidence
+3. Decide on dark mode (`FOUND-4` in the design spec) — flagged low-confidence
    twice now and still not built.
 
 ## Design decisions worth not relitigating

@@ -11,6 +11,7 @@ import {
   buildPairingGraph, partners, bridges,
   blendCoverage, rankBlends, highestLeverage, shoppingList, jarSize, compose,
 } from '../src/engine/index.js';
+import { planStepText } from '../src/ui/i18n.js';
 
 const root = path.resolve(import.meta.dirname, '..');
 const load = (f) => JSON.parse(fs.readFileSync(path.join(root, 'data', f), 'utf8'));
@@ -113,7 +114,12 @@ test('every blend produces a plan that ends in storage advice', () => {
     const steps = makePlan(scaleBlend(b, b.batch_g), byId).steps;
     assert.ok(steps.length >= 2, `${b.id}: plan too short`);
     assert.equal(steps.at(-1).kind, 'store');
-    for (const s of steps) assert.ok(s.text && !/undefined|NaN|\[object/.test(s.text), `${b.id}: bad step "${s.text}"`);
+    for (const s of steps) {
+      for (const lang of ['en', 'zh']) {
+        const text = planStepText(s, byId, lang);
+        assert.ok(text && !/undefined|NaN|\[object/.test(text), `${b.id}/${lang}: bad step "${text}"`);
+      }
+    }
   }
 });
 
@@ -327,8 +333,9 @@ test('the service worker precaches every file the app actually loads', () => {
 test('method steps stay short enough to read at the stove', () => {
   for (const b of blends) {
     for (const s of makePlan(scaleBlend(b, b.batch_g), byId).steps) {
-      const words = s.text.split(/\s+/).length;
-      assert.ok(words <= 24, `${b.id}: a ${words}-word step is an essay — "${s.text}"`);
+      const text = planStepText(s, byId, 'en');
+      const words = text.split(/\s+/).length;
+      assert.ok(words <= 24, `${b.id}: a ${words}-word step is an essay — "${text}"`);
     }
   }
 });

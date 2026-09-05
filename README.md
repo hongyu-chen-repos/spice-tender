@@ -33,7 +33,7 @@ From then on, open it from the home screen icon, not the browser.
 - Grams are exact. Spoon and piece amounts are estimates.
 - Substitute suggestions are a starting point — taste as you go.
 - Southeast Asian dishes are thin, since that cuisine leans on wet pastes rather than dry spice blends.
-- The interface and all names are English + Chinese. Cooking notes are English only.
+- The interface, names and method steps are English + Chinese. The short flavour note on each spice, blend and dish is English only.
 
 ## 📄 License
 

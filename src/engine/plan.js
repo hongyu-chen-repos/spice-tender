@@ -15,9 +15,7 @@ const GRIND_TARGET = {
   rub: 'medium', finish: 'fine', table: 'coarse',
 };
 
-const fmtTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
-const list = (a) => (a.length > 1 ? `${a.slice(0, -1).join(', ')} and ${a.at(-1)}` : a[0] || '');
-const lower = (s) => s.name.toLowerCase();
+export const fmtTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
 /**
  * Build the step list for a scaled blend.
@@ -47,69 +45,37 @@ export function makePlan(scaled, byId) {
   const panTime = active.length ? Math.max(...active.map((w) => WAVE_SECONDS[w])) : 0;
 
   if (active.length) {
-    steps.push({ kind: 'pan', text: 'Dry pan, no oil, medium heat. Keep it moving.' });
+    steps.push({ kind: 'pan' });
     for (const w of active) {
       const at = panTime - WAVE_SECONDS[w];
-      steps.push({
-        kind: 'toast', at, wave: w, items: waves[w].map((i) => i.s),
-        text: `${fmtTime(at)} — add ${list(waves[w].map((i) => lower(i.spice)))}.`,
-      });
+      steps.push({ kind: 'toast', at, wave: w, items: waves[w].map((i) => i.s) });
     }
-    steps.push({
-      kind: 'pull', at: panTime,
-      text: `${fmtTime(panTime)} — pull it off when it smells nutty. Tip it onto a cold plate.`,
-    });
-    steps.push({
-      kind: 'cool',
-      text: grinds
-        ? 'Let it cool for a few minutes before grinding.'
-        : 'Let it cool completely before it goes in the jar.',
-    });
+    steps.push({ kind: 'pull', at: panTime });
+    steps.push({ kind: 'cool', grinds });
   }
 
   // Only things that actually go through a mill get grinding advice.
   const milled = [...active.flatMap((w) => waves[w]), ...coldWhole];
   if (milled.length && (grinds || blend.method === 'grind')) {
     const target = GRIND_TARGET[blend.dose?.stage] || 'medium';
-    const stubborn = milled.map((i) => i.spice).filter((s) => s.grind === 'hard' || s.grind === 'fibrous');
-    let text = `Grind ${target}.`;
-    if (stubborn.length) {
-      const n = stubborn.length > 1;
-      text += ` Break up the ${list(stubborn.map(lower))} first.`;
-    }
-    steps.push({ kind: 'grind', text });
+    const stubborn = milled.map((i) => i.spice).filter((s) => s.grind === 'hard' || s.grind === 'fibrous').map((s) => s.id);
+    steps.push({ kind: 'grind', target, stubborn });
   }
 
   const coarse = parts.filter((p) => p.coarse).map((p) => byId[p.s]).filter(Boolean);
   if (coarse.length && grinds && coarse.length < parts.length) {
-    steps.push({
-      kind: 'texture', items: coarse.map((s) => s.id),
-      text: `Leave the ${list(coarse.map(lower))} coarse and stir ${coarse.length > 1 ? 'them' : 'it'} back in at the end.`,
-    });
+    steps.push({ kind: 'texture', items: coarse.map((s) => s.id) });
   }
 
   if (coldWhole.length && !grinds) {
-    steps.push({
-      kind: 'prep', items: coldWhole.map((i) => i.s),
-      text: `Grate the ${list(coldWhole.map((i) => lower(i.spice)))} separately.`,
-    });
+    steps.push({ kind: 'prep', items: coldWhole.map((i) => i.s) });
   }
 
   if (coldReady.length) {
-    const names = list(coldReady.map((i) => lower(i.spice)));
-    const hasSugar = coldReady.some((i) => i.spice.burns_low);
-    let text;
-    if (!active.length) {
-      text = blend.method === 'mix-whole'
-        ? 'Shake it all together in a jar.'
-        : 'Mix everything in a bowl.';
-    } else {
-      text = `Stir in the ${names} off the heat.`;
-    }
-    steps.push({ kind: 'mix', items: coldReady.map((i) => i.s), text });
+    steps.push({ kind: 'mix', items: coldReady.map((i) => i.s), active: !!active.length, method: blend.method });
   }
 
-  steps.push({ kind: 'store', text: storageLine(scaled, byId) });
+  steps.push({ kind: 'store', months: shelfLife(scaled, byId).months });
   return { steps, waves, coldWhole, coldReady, panTime, toasts, grinds };
 }
 
@@ -135,9 +101,4 @@ export function shelfLife(scaled, byId) {
     if (months < worst.months) worst = { months, name: s.name };
   }
   return worst.months === Infinity ? { months: 12, name: null } : worst;
-}
-
-function storageLine(scaled, byId) {
-  const { months } = shelfLife(scaled, byId);
-  return `Keep it in an airtight jar somewhere dark. Use it within ${months} month${months === 1 ? '' : 's'}.`;
 }

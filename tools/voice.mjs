@@ -29,10 +29,11 @@ for (const [file, key] of [['spices.json', 'note'], ['blends.json', 'note'], ['d
 }
 
 const { createBench, scaleBlend, makePlan, substitutes } = await import('../src/engine/index.js');
+const { planStepText } = await import('../src/ui/i18n.js');
 const bench = createBench({ spices: read('spices.json'), blends: read('blends.json'), dishes: read('dishes.json') });
 for (const b of bench.blends) {
   for (const s of makePlan(scaleBlend(b, b.batch_g), bench.byId).steps) {
-    items.push({ file: 'method', id: b.id, text: s.text });
+    items.push({ file: 'method', id: b.id, text: planStepText(s, bench.byId, 'en') });
   }
 }
 for (const s of bench.spices) {
